@@ -32,10 +32,9 @@ app.layout = html.Div([
 )
 def display_page(pathname):
     datepicker = dcc.DatePickerRange(id='rangepicker',
-                                     start_date=date.today()-timedelta(days=1),
+                                     start_date=date.today(),
                                      end_date=date.today(),
                                      display_format='D.M.YY',
-                                     start_date_placeholder_text='M-D-Y-Q',
                                      )
     ok_button = html.Button("-->OK<--", id="ok")
 

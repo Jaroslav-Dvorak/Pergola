@@ -1,3 +1,13 @@
+from datetime import datetime
+
+end = datetime.fromisoformat("2013-03-06")
+end = end.replace(hour=23, minute=59, second=59, microsecond=999999)
+print(end)
+
+exit()
+
+
+
 import paho.mqtt.publish as publish
 import json
 # publish.single("Juntek", 10, hostname="192.168.167.94")

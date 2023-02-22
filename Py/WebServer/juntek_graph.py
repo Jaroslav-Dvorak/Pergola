@@ -1,3 +1,5 @@
+import json
+from datetime import datetime
 import plotly.graph_objs as go
 import pandas as pd
 from sqlalchemy import create_engine
@@ -38,9 +40,23 @@ def juntek_graph(df):
     return fig
 
 
+with open("../db_conf.json", "r") as f:
+    raw = f.read()
+conn_params = json.loads(raw)
+
+db = conn_params["database"]
+usr = conn_params["user"]
+psw = conn_params["password"]
+adr = conn_params["host"]
+port = conn_params["port"]
+
+engine = create_engine(f'postgresql://{usr}:{psw}@{adr}:{port}/{db}')
+
+
 def get_data(time_start, time_end):
-    engine = create_engine('postgresql://pi:pi@192.168.43.37:5432/Pergola')
+    time_end = datetime.fromisoformat(time_end)
+    time_end = time_end.replace(hour=23, minute=59, second=59, microsecond=999999)
     query = 'SELECT * FROM public."Juntek" '
-    query += f"WHERE time > '{time_start}' AND time < '{time_end}'"
+    query += f"WHERE time > '{time_start}' AND time <= '{time_end}'"
     df = pd.read_sql(con=engine, sql=query)
     return df
