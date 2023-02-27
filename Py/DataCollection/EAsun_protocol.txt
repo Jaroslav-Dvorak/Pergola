@@ -1,0 +1,602 @@
+B
+1
+Machine type code
+R
+1
+-
+%d
+No
+Product type code:00 (Controller, Home)01 (Controller, Street lights)03 (Inverter)04 (Integrated inverter controller)05 (Mains frequency off-grid)
+14
+2
+Software version
+R
+1
+-
+%d
+No
+0x0014:CPU1 version, such as 100, indicating V1.000x0015:CPU2 version, such as 100, indicating V1.00
+16
+2
+Hardware version
+R
+1
+-
+%d
+No
+0x0016:Control board version, such as 100, indicating V1.000x0017:Power board version, such as 100, indicating V1.00
+1A
+1
+RS485 address(read only)
+R
+1
+-
+%d
+No
+Rs485 address(read only)
+1B
+1
+Model code
+R
+1
+-
+%d
+No
+Model code
+1C
+2
+RS485 protocol version
+R
+1
+-
+%x
+No
+0x001C: Protocol version, such as 100, indicating V1.000x001D:Reserved
+21
+20
+software compilation time
+R
+1
+-
+%s
+No
+String format, low 8 bits per register valid, high 8 bits invalid.
+35
+20
+Product SN string
+R
+1
+-
+%s
+No
+String format, low 8 bits per register valid, high 9 bits invalid.
+100
+1
+Battery level SOC
+R
+1
+-
+%d
+No
+Percentage of remaining battery power
+101
+1
+Battery voltage
+R
+0.1
+V
+%.1fV
+No
+Battery voltage, such as 485, indicating 48.5V
+102
+1
+Battery current
+R
+0.1
+A
+%.1fA
+Yes
+Battery current, such as 500, indicating 50.0AIt's charge current if the value is greater the zero,it's discharge current if thevalue is less then zero
+107
+1
+PV panel 1 voltage
+R
+0.1
+V
+%.1fV
+No
+PV panel 1 voltage
+108
+1
+PV panel 1current
+R
+0.1
+A
+%.1fA
+No
+PV panel 1 current
+109
+1
+PV panel 1 power
+R
+1
+W
+%d
+No
+PV panel 1 power
+10B
+1
+Charge state
+R
+1
+-
+%d
+No
+0x0000: Chgarge off0x0001: Quik charge0x0002: Const voltage charge0x0004: Float charge0x0005: Reserved0x0006: Li battery acitvate0x0007: Reserved
+10E
+1
+Charge power
+R
+1
+W
+%dW
+No
+Total charge power, include charge power by mains and pv
+10F
+1
+PV panel 2 voltage
+R
+0.1
+V
+%.1fV
+No
+PV panel 2 voltage
+110
+1
+PV panel 2 current
+R
+0.1
+A
+%.1fA
+No
+PV panel 2 current
+111
+1
+PV panel 2 power
+R
+1
+W
+%d
+No
+PV panel 2 power
+200
+4
+Current fault bits
+R
+1
+-
+%x
+No
+Fault bits, each representing one fault, for a total of 64 bits. This register isused by the internal debug tool.
+204
+4
+Current fault code
+R
+1
+-
+%d
+No
+Current fault code, with 4 addresses in total, each address storing a fault codecorresponding to the current fault. 4 fault codes can be displayedsimultaneously. 0 indicates no fault. For example, there are currently twofaults, battery under-voltage and inverter overload.Then, the following is shown:0x204: 010x205: 140x206: 000x207: 00
+20C
+3
+Current time
+RW
+1
+-
+%zdt
+No
+0x020C: high 8 bits: year, low 8 bits: month0x020D: high 8 bits: day, low 8 bits: hour0x020E: high 8 bits: minute, low 8 bits: second
+210
+1
+Current state of the machine
+R
+1
+-
+%d
+No
+0: Power-up delay1: Waiting state2: Initialization3: Soft start4: Mains powered operation5: Inverter powered operation6: Inverter to mains7: Mains to inverter8: Battery activate9: Shutdown by user10: Fault
+211
+1
+Password protection status mark
+R
+1
+-
+%d
+No
+0: No password entered by the user1: User password has been entered4: Manufacturer password has been entered
+212
+1
+Bus voltage
+R
+0.1
+V
+%.1fV
+No
+Bus voltage
+213
+1
+Grid voltage phase A
+R
+0.1
+V
+%.1fV
+No
+Mains voltage phase A
+214
+1
+Grid current phase A
+R
+0.1
+A
+%.1fA
+No
+Mains side input current phase A
+215
+1
+Grid frequency
+R
+0.01
+Hz
+%.2fHz
+No
+Mains frequency
+216
+1
+Inverter voltage phase A
+R
+0.1
+V
+%.1fV
+No
+Inverter output voltage phase A
+217
+1
+Inverter current phase A
+R
+0.1
+A
+%.1fA
+No
+Inverter inductive current phase A
+218
+1
+Inverter frequency
+R
+0.01
+Hz
+%.2fHz
+No
+Inverter frequency
+219
+1
+Load current phase A
+R
+0.1
+A
+%.1fA
+No
+Load side current phase A
+21B
+1
+Load active power phase A
+R
+1
+W
+%dW
+No
+Load active power phase A
+21C
+1
+Load apparent power phase A
+R
+1
+VA
+%dVA
+No
+Load apparent power phase A
+21E
+1
+Mains charge current
+R
+0.1
+A
+%.1fA
+No
+Battery side current when charging on mains
+21F
+1
+Load ratio phase A
+R
+1
+%
+%d%
+No
+Load percentage phase A
+220
+1
+Heat sink A temperature
+R
+0.1
+°C
+%.1f°C
+Yes
+DC-DC heat sink temperature
+221
+1
+Heat sink B temperature
+R
+0.1
+°C
+%.1f°C
+Yes
+DC-AC heat sink temperature
+222
+1
+Heat sink C temperature
+R
+0.1
+°C
+%.1f°C
+Yes
+Translator heat sink tmperature
+224
+1
+PV charge current
+R
+0.1
+A
+%.1fA
+No
+Battery side current by PV charging
+228
+1
+PBusVolt
+R
+0.1
+V
+%.1fV
+无
+Just valid for specific machine models
+229
+1
+NBusVolt
+R
+0.1
+V
+%.1fV
+无
+Just valid for specific machine models
+22A
+1
+GridVoltB
+R
+0.1
+V
+%.1fV
+无
+Mains voltage phase B, just valid for specific machine models
+22B
+1
+GridVoltC
+R
+0.1
+V
+%.1fV
+无
+Mains voltage phase C, just valid for specific machine models
+22C
+1
+InvVoltB
+R
+0.1
+V
+%.1fV
+无
+Inverter output voltage phase B, just valid for specific machinemodels
+22D
+1
+InvVoltC
+R
+0.1
+V
+%.1fV
+无
+Inverter output voltage phase C, just valid for specific machinemodels
+22E
+1
+InvCurrB
+R
+0.1
+A
+%.1fA
+无
+Inverter inductive current phase B, just valid for specificmachine models
+22F
+1
+InvCurrC
+R
+0.1
+A
+%.1fA
+无
+Inverter inductive current phase B, just valid for specificmachine models
+230
+1
+LoadCurrB
+R
+0.1
+A
+%.1fA
+无
+Load side current phase B, just valid for specific machinemodels
+231
+1
+LoadCurrC
+R
+0.1
+A
+%.1fA
+无
+Load side current phase C, just valid for specific machinemodels
+232
+1
+LoadActivePowerB
+R
+1
+W
+%dW
+无
+Load side active power phase B, just valid for specific machinemodels
+233
+1
+LoadActivePowerC
+R
+1
+W
+%dW
+无
+Load side active power phase C, just valid for specific machinemodels
+234
+1
+LoadReactivePowerB
+R
+1
+VA
+%dVA
+无
+Load side reactive power phase B, just valid for specificmachine models
+235
+1
+LoadReactivePowerC
+R
+1
+VA
+%dVA
+无
+Load side reactive power phase C, just valid for specificmachine models
+236
+1
+LoadRatioB
+R
+1
+%
+%d%
+无
+Load percentage phase B, just valid for specific machinemodels
+237
+1
+LoadRatioC
+R
+1
+%
+%d%
+无
+Load percentage phase C, just valid for specific machinemodels
+DF00
+1
+Power ON/OFF control
+W
+1
+-
+%x
+No
+0: Power off1: Power on
+DF01
+1
+Reset control
+W
+1
+-
+%x
+No
+1: ResetOther: no action
+DF02
+1
+Restore to default settings
+W
+1
+-
+%x
+No
+0xAA: RestoreOther: No actionRestore to default settings to clear all accumulated information and restoreparameters to default state, restart to take effect
+DF03
+1
+Clear current alarm
+W
+1
+-
+%x
+No
+1: ClearOther: no action
+DF04
+1
+Clear statistics
+W
+1
+-
+%x
+No
+1: ClearOther: no action
+DF05
+1
+Clear history
+W
+1
+-
+%x
+No
+1: ClearOther: no action
+DF06
+2
+Firmware upgrade command
+W
+1
+-
+%x
+No
+Firmware upgrade command
+DF08
+1
+Sleep control/activation command
+W
+1
+-
+%x
+No
+5A5A:sleepA5A5:run
+DF09
+3
+Manual light up switch
+W
+1
+-
+%x
+No
+1:Switch 1 on;0 off2:Light-up power 0~100%3:Light-up time 0~ 54000S
+DF0C
+1
+Generator switch command
+W
+1
+-
+%x
+No
+0: No action1: Switch to power supply by generator
+DF0D
+1
+Immediate equalizing chargecommand
+W
+1
+%d
+No
+0:Disable1:Enable

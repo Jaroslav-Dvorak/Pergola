@@ -1,0 +1,120 @@
+E20B
+1
+AC input range
+RW
+1
+%d
+No
+0
+1
+1
+0:wide range(APL)1:narrow range(UPS)
+E20C
+1
+Eco mode
+RW
+1
+%d
+No
+0
+1
+0
+0:Disable1:Enable
+E20D
+1
+Overload auto restart
+RW
+1
+%d
+No
+0
+1
+1
+0:Disable1:Enable
+E20E
+1
+Over temperature auto restart
+RW
+1
+%d
+No
+0
+1
+1
+0:Disable1:Enable
+E20F
+1
+Charge priority
+RW
+1
+%d
+No
+0
+3
+2
+0:PV preferred, only start mains charging when PV is not available1:Mains preferred, only start PV charging when mains is not available2: Hybrid mode, mains and PV charging at the same time, PV is preferred.3: PV only, mains does not charge.
+E210
+1
+Alarm control
+RW
+1
+%d
+No
+0
+1
+1
+0:Disable1:Enable
+E211
+1
+Alarm enable when input source isinterrupted
+RW
+1
+%d
+No
+0
+1
+1
+0:Disable1:Enable
+E212
+1
+Overload bypass enable
+RW
+1
+%d
+No
+0
+1
+1
+0:Disable1:Enable
+E214
+1
+Split-phase transformer
+RW
+1
+%d
+No
+0
+1
+0
+0:Disable1:Enable
+E215
+1
+BMS communication enable
+RW
+1
+%d
+No
+0
+1
+0
+0:Disable1:Enable
+E21B
+1
+BMS protocol
+RW
+1
+%d
+No
+0
+30
+0

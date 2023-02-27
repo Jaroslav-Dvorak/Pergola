@@ -1,0 +1,225 @@
+F000
+7
+Last 7 days historical data of PVpower generation
+R
+1
+AH
+%d
+No
+The electric quantity data occupies one register every day.
+F007
+7
+Last 7 days historical data ofbattery charge level
+R
+1
+AH
+%d
+No
+The electric quantity data occupies one register every day.
+F00E
+7
+Last 7 days historical data ofbattery discharge level
+R
+1
+AH
+%d
+No
+The electric quantity data occupies one register every day.
+F015
+7
+Last 7 days historical data of mainscharge level
+R
+1
+AH
+%d
+No
+The electric quantity data occupies one register every day.
+F01C
+7
+Last 7 days historical data ofpower consumption by load
+R
+0.1
+kwh
+%.1fkWh
+No
+The electric quantity data occupies one register every day.
+F023
+7
+Last 7 days historical data ofpower consumption by load frommains
+R
+0.1
+kwh
+%.1fkWh
+No
+The electric quantity data occupies one register every day.
+F02D
+1
+Battery charge AH of the day
+R
+1
+AH
+%d
+No
+The total battery charge level (AH) of the day, applicable to the 2ndgeneration machines.
+F02E
+1
+Battery discharge AH of the day
+R
+1
+AH
+%d
+No
+The total battery discharge level (AH) of the day, applicable to the 2ndgeneration machines.
+F02F
+1
+PV power generation of the day
+R
+0.1
+kWh
+%.1fkWh
+No
+The total PV power generation of the day, applicable to the 2nd generationmachines.
+F030
+1
+Load power consumption of theday
+R
+0.1
+kWh
+%.1fkWh
+No
+The total power consumption by load of the day, applicable to the 2ndgeneration machines.
+F031
+1
+Total running days
+R
+1
+day
+%d
+No
+Total running days
+F034
+2
+Accumulated battery charge AH
+R
+1
+AH
+%d
+No
+Accumulated battery charge AH
+F036
+2
+Accumulated battery discharge AH
+R
+1
+AH
+%d
+No
+Accumulated battery discharge AH
+F038
+2
+Accumulated PV power generation
+R
+0.1
+kWh
+%.1fkWh
+No
+Accumulated PV power generation
+F03A
+2
+Accumulated power consumptionof load
+R
+0.1
+kWh
+%.1fkWh
+No
+Accumulated power consumptionof load
+F03C
+1
+Mains charge level of today
+R
+1
+AH
+%d
+No
+Mains charge level AH of the day
+F03D
+1
+Power consumption by load frommains of today
+R
+0.1
+kWh
+%.1fkWh
+No
+Power consumption by load from mains of the day
+F03E
+1
+Inverter working hours of today
+R
+1
+min
+%dmin
+No
+Inverter working hours of today
+F03F
+1
+Bypass working hours of today
+R
+1
+min
+%dmin
+No
+Bypass working hours of today
+F040
+3
+Power on time
+R
+1
+d
+%d
+No
+Power on time
+F043
+3
+Last equalizing charge completiontime
+R
+1
+d
+%d
+No
+Last equalizing charge completiontime
+F046
+2
+Accumulated charge level by mains
+R
+0.1
+kWh
+%.1fkWh
+No
+Accumulated charge level by mains
+F048
+2
+Accumulated power consumptionby load from mains
+R
+0.1
+kWh
+%.1fkWh
+No
+Accumulated power consumptionby load from mains
+F04A
+1
+Accumulated working hours ofinverter
+R
+1
+h
+%dh
+No
+Accumulated working hours ofinverter
+F04B
+1
+Accumulated working hours ofbypass
+R
+1
+h
+%dh
+No
+Accumulated working hours ofbypass

@@ -1,0 +1,564 @@
+E001
+1
+Pv charge current setup
+RW
+0.1
+A
+%dA
+No
+0
+100
+60
+PV charge current limit
+E003
+1
+System voltage rate(read only)
+RW
+1
+V
+%dV
+No
+12
+255
+48
+12：12V24：24V36：36V
+E004
+1
+Battery type
+RW
+1
+-
+%d
+No
+0
+14
+3
+0 : User define1 : SLD2 : FLD
+E005
+1
+Over voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+15.5
+Battery overcharge protection, fast protection
+E006
+1
+Limited charge voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+14.4
+Overcharge protection voltage
+E007
+1
+Equalizing charge voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+14.4
+Equalizing charge voltage
+E008
+1
+Boost charge voltage/overchargevoltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+14.4
+Boost charge for lead acid battery, overcharge voltage for lithium battery
+E009
+1
+Floating charge voltage/overchargereturn charge
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+14
+The overcharge return voltage is for the lithium battery, and after chargingstops due to overcharge, when the battery voltage is below the judgmentpoint, charging starts again.
+E00A
+1
+Boost charge return voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+13.2
+After the battery enters floating charge, the battery voltage is again below thejudgment point and the battery enters the boost charge again.
+E00B
+1
+Over discharge return voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+12.6
+After the battery enters under-voltage protection due to over discharge, returndischarge state voltage
+E00C
+1
+Under-voltage warning voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+11
+Low battery voltage alarm, load not cut off
+E00D
+1
+Over discharge voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+12.2
+Low battery voltage alarm, load cut off
+E00E
+1
+Limited discharge voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+11.2
+During the battery over-discharge delay, the battery voltage is lower than thejudgment point and the load is immediately turned off.
+E010
+1
+Over discharge delay time
+RW
+1
+S
+%dS
+No
+0
+120
+60
+Over discharge delay time
+E011
+1
+Equalizing charge time
+RW
+1
+Min
+%dmin
+No
+0
+600
+120
+Step +10
+E012
+1
+Boost charge time
+RW
+1
+Min
+%dmin
+No
+10
+600
+120
+Step +10
+E013
+1
+Equalizing charge interval
+RW
+1
+day
+%dDay
+No
+0
+255
+30
+Equalizing charge interval
+E01B
+1
+Mains switching voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+11.5
+Load is switched to mains when the battery voltage is below the judgmentpoint
+E022
+1
+Inverter switching voltage
+RW
+0.1
+V
+%.1fV
+No
+9
+15.5
+14
+Switch back to inverter when the battery voltage is higher than the judgmentpoint
+E023
+1
+Equalizing charge timeout time
+RW
+1
+min
+%dmin
+No
+5
+900
+240
+Step +5
+E026
+1
+1-section start charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E027
+1
+1-section stop charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E028
+1
+2-section start charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E029
+1
+2-section stop charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E02A
+1
+3-section start charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E02B
+1
+3-section stop charging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E02C
+1
+Sectional charging functionenable
+RW
+1
+-
+%d
+无
+0
+1
+0
+0:Disable1:Enable
+E02D
+1
+1-section start discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E02E
+1
+1-section stop discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E02F
+1
+2-section start discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E030
+1
+2-section stop discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E031
+1
+3-section start discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E032
+1
+3-section stop discharging time
+RW
+1
+h/m
+%d
+无
+0
+5947
+0
+hour and minute：23*256+59==5947
+E033
+1
+Sectional dischargingfunction enable
+RW
+1
+-
+%d
+无
+0
+1
+0
+0:Disable1:Enable
+E034
+3
+current time setup
+RW
+1
+-
+%d
+无
+0
+-
+0
+E034 - year and month：99*256+12==25356E035 -day and hour：31*256+23==7959E036 -minute and second：59*256+59==15163
+E037
+1
+PV grid-connected powergeneration enable
+RW
+1
+-
+%d
+无
+0
+1
+0
+0:Disable1:Enable
+E038
+1
+GFCI Enable
+RW
+1
+-
+%d
+无
+0
+1
+0
+0:Disable1:Enable
+E200
+1
+Inverter 485 address setup
+RW
+1
+-
+%d
+No
+1
+254
+1
+Integers, range: 1~254
+E201
+1
+Inverter parallel mode setup
+RW
+1
+-
+%d
+No
+0
+7
+0
+0：Stand alone1：Parallel in single phase2：Parallel in two phase and phase is 0°3：Parallel in two phase and phase is 120°4：Parallel in two phase and phase is 180°5：Parallel in three phase and phase is A6：Parallel in three phase and phase is B7：Parallel in three phase and phase is C
+E202
+1
+User password set value
+W
+1
+-
+%d
+No
+0
+65535
+0
+The password is a 4-bit decimal number. No password when it is 0.Keyboard password can be changed via keyboard and communication
+E203
+1
+Password input
+W
+1
+-
+%d
+No
+0
+65535
+0
+Password input
+E204
+1
+Output priority
+RW
+1
+-
+%d
+No
+0
+2
+1
+Output priority：0：solar1：line2：sbu
+E205
+1
+Mains charge current limit
+RW
+0.1
+A
+%.1fA
+No
+0
+100
+80
+Maximum mains charge current limit
+E206
+1
+Equalizing charge enable
+RW
+1
+V
+%d
+No
+0
+1
+0
+Equalizing charge enable
+E208
+1
+Output voltage
+RW
+0.1
+V
+%.1fV
+No
+100
+264
+120
+Output voltage
+E209
+1
+Output frequency
+RW
+0.01
+Hz
+%.2fHz
+No
+45
+65
+50
+Output frequency
+E20A
+1
+Maximum charge current
+RW
+0.1
+A
+%.1fA
+No
+0
+150
+80
+Maximum charge current
