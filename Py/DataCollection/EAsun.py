@@ -4,13 +4,31 @@ from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
 class EAsun:
     def __init__(self):
-        self.battery_level = 0          # 256
-        self.battery_voltage = 0        # 257
-        self.PV_voltage = 0             # 263
-        self.PV_current = 0             # 264
-        self.PV_power = 0               # 265
-        self.battery_chargestate = 0    # 267
-        self.charge_power = 0           # 270    (count = 14)
+        self.P01_addr = 0x100   # 256
+        #               {"name": [length, valid, value]
+        self.P01 = {"battery_level":        [1, True, None],
+                    "battery_voltage":      [1, True, None],
+                    "battery_current":      [1, True, None],
+                    "device_temperature":   [1, False, None],  # invalid
+                    "load_dc_voltage":      [1, False, None],  # invalid
+                    "load_dc_current":      [1, False, None],  # invalid
+                    "load_dc_power":        [1, False, None],  # invalid
+                    "PV_voltage":           [1, True, None],
+                    "PV_current":           [1, True, None],
+                    "PV_power":             [1, True, None],   # can be computed
+                    "load_on_off_command":  [1, False, None],  # invalid, write only
+                    "battery_charge_state": [1, True, None],   # 0: off, 1: QC, 2: CV, 3: FlCharge, 6:LiBat activate
+                    "charge_power_total":   [1, False, None]
+                    }
+        self.P01_length = sum([v[0] for v in self.P01.values()])
+
+        # self.battery_level = 0          # 256
+        # self.battery_voltage = 0        # 257
+        # self.PV_voltage = 0             # 263
+        # self.PV_current = 0             # 264
+        # self.PV_power = 0               # 265
+        # self.battery_chargestate = 0    # 267
+        # self.charge_power = 0           # 270    (count = 14)
 
         self.inverter_operation = 0     # 528
         self.inverter_current = 0       # 537
@@ -57,5 +75,5 @@ class EAsun:
 
 
 easun = EAsun()
-easun.read_data('/dev/ttyUSB1')
+# easun.read_data('/dev/ttyUSB1')
 
