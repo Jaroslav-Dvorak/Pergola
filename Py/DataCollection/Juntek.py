@@ -5,7 +5,10 @@ import paho.mqtt.publish as publish
 
 
 class Juntek:
-    def __init__(self):
+    def __init__(self, db_table, serial_port):
+
+        self.db_table = db_table
+        self.serial_port = serial_port
 
         self.voltage = 0
         self.current = 0
@@ -16,9 +19,9 @@ class Juntek:
         self.read_data_error = 0
         self.errors = []
 
-    def read_data(self, serial_port):
+    def read_data(self):
         try:
-            with serial.Serial(serial_port, 115200, timeout=1, write_timeout=1) as ser:
+            with serial.Serial(self.serial_port, 115200, timeout=1, write_timeout=1) as ser:
                 ser.write(b':R50=1,2,1,\r\n')
                 line = ser.readline()
         except KeyboardInterrupt:
@@ -58,14 +61,14 @@ class Juntek:
             self.read_data_error += 1
             self.errors.append("No data")
 
-    def write2db(self, conn_obj, db_table):
+    def write2db(self, conn_obj):
         if (time() - self.read_timestamp) > 10:
             self.errors.append("Data too old.")
             return False
 
         try:
             with conn_obj.cursor() as cursor:
-                cursor.execute(f'''INSERT into public."{db_table}"
+                cursor.execute(f'''INSERT into public."{self.db_table}"
                     (voltage, current, charged, temperature) 
                     VALUES ({self.voltage}, {self.current}, 
                     {self.charged}, {self.temperature})

@@ -4,14 +4,130 @@ from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 import pandas as pd
 from datetime import datetime
 
+
 class EAsun:
+    def __init__(self, db_table, serial_port):
+        self.serial_port = serial_port
+        self.db_table = db_table
+        self.actual_data_parameters = {
+            0x100: {
+                "battery_level":        True,
+                "battery_voltage":      True,
+                "battery_current":      False,
+                "device_temperature":   False,  # invalid
+                "load_dc_voltage":      False,  # invalid
+                "load_dc_current":      False,  # invalid
+                "load_dc_power":        False,  # invalid
+                "PV_voltage":           True,
+                "PV_current":           True,
+                "PV_power":             True,   # can be computed
+                "load_on_off_command":  False,  # invalid, write only
+                "battery_charge_state": True,   # 0: off, 1: QC, 2: CV, 3: FlCharge, 6:LiBat activate
+            },
+            0x216: {
+                "inverter_voltage":    True,
+                "inverter_current":    True,
+                "inverter_frequency":  False,
+                "load_current":        True,
+                "load_pf":             False,     # invalid
+                "load_active_power":   True,
+                "load_apparent_power": True,
+                "inv_dc_component":    False,    # invalid
+                "main_charge_current": True,
+                "load_ratio":          True,
+                "heatsink_temp_a":     True,
+                "heatsink_temp_b":     True,
+                "heatsink_temp_c":     True,
+                "heatsink_temp_d":     True,      # invalid
+                    }
+            }
+
+        # self.actual_data_values = {}
+        self.errors = []
+
+    def connect(self):
+        client = ModbusClient(method='rtu',
+                              port=self.serial_port,
+                              baudrate=9600,
+                              timeout=1,
+                              stopbits=1,
+                              bytesize=8,
+                              handshaking='N',
+                              parity='N',
+                              strict=False)
+        return client
+
+    def read_actual_data(self):
+        client = self.connect()
+        data = {}
+        results = []
+        try:
+            for addr, item in self.actual_data_parameters.items():
+                length = len(item)
+                result = client.read_holding_registers(address=addr, count=length, unit=1)
+                results.append(result)
+                sleep(0.5)
+        except TimeoutError:
+            return False
+
+        try:
+            for result, names in zip(results, self.actual_data_parameters.values()):
+                for register, name in zip(result.registers, names):
+                    valid = names[name]
+                    if valid:
+                        data[name] = register
+        except AttributeError:
+            return False
+        else:
+            return data
+        finally:
+            client.close()
+
+    def columns(self):
+        columns = []
+        for params_valid in self.actual_data_parameters.values():
+            for params, valid in params_valid.items():
+                if valid:
+                    columns.append(params)
+        for col in columns:
+            print(col)
+
+    def on_off(self, flag):
+        client = self.connect()
+        client.write_register(0xDF00, int(flag))
+        client.close()
+
+    def save_mode(self, enable):
+        client = self.connect()
+        client.write_register(0xE20C, int(enable))
+        client.close()
+
+    def write2db(self, conn_obj, data):
+        keys = ", ".join(data.keys())
+        values = [str(val) for val in data.values()]
+        values = ", ".join(values)
+        sqlstr = f'INSERT into public."{self.db_table}" ({keys}) VALUES ({values})'
+
+        try:
+            with conn_obj.cursor() as cursor:
+                cursor.execute(sqlstr)
+        except Exception as e:
+            self.errors.append(e)
+            return
+        else:
+            return True
+
+    def mqtt_publish(self, ok):
+        pass
+
+
+class OldClassEAsun:
     def __init__(self):
         self.P01_addr = 0x100   # 256
-        #               {"name": [length, db_write, value]
-        self.P01 = {
+        self.P01 = {  # {"name": [length, db_write, value]
             "battery_level":        [1, True, None],
             "battery_voltage":      [1, True, None],
-            "battery_current":      [1, True, None],
+            "battery_current":      [1, False, None],
             "device_temperature":   [1, False, None],  # invalid
             "load_dc_voltage":      [1, False, None],  # invalid
             "load_dc_current":      [1, False, None],  # invalid
@@ -22,14 +138,12 @@ class EAsun:
             "load_on_off_command":  [1, False, None],  # invalid, write only
             "battery_charge_state": [1, True, None],   # 0: off, 1: QC, 2: CV, 3: FlCharge, 6:LiBat activate
             "contr_failure_alarm":  [2, False, None],  # invalid
-            "charge_power_total":   [1, False, None]
-                    }
+            "charge_power_total":   [1, False, None]}
         self.P01_length = sum([v[0] for v in self.P01.values()])
 
         self.P02a_addr = 0x200
-        #               {"name": [length, db_write, value]
-        self.P02a = {
-             "fault_bits":          [4, False, None],
+        self.P02a = {  # {"name": [length, db_write, value]
+             "fault_bits":          [4, True, None],
              "fault_code_1":        [1, True, None],
              "fault_code_2":        [1, True, None],
              "fault_code_3":        [1, True, None],
@@ -44,34 +158,30 @@ class EAsun:
              "bus_voltage":         [1, False, None],
              "grid_voltage":        [1, False, None],
              "grid_current":        [1, False, None],
-             "grid_frequency":      [1, False, None],
-                     }
+             "grid_frequency":      [1, False, None]}
         self.P02a_length = sum([v[0] for v in self.P02a.values()])
 
         self.P02b_addr = 0x216
-        #               {"name": [length, db_write, value]
-        self.P02b = {
+        self.P02b = {  # {"name": [length, db_write, value]
             "inverter_voltage":    [1, True, None],
             "inverter_current":    [1, True, None],
-            "inverter_frequency":  [1, True, None],
+            "inverter_frequency":  [1, False, None],
             "load_current":        [1, True, None],
-            "load_pf":             [1, True, None],     # invalid
+            "load_pf":             [1, False, None],     # invalid
             "load_active_power":   [1, True, None],
             "load_apparent_power": [1, True, None],
             "inv_dc_component":    [1, False, None],    # invalid
-            "main_charge_current": [1, False, None],
+            "main_charge_current": [1, True, None],
             "load_ratio":          [1, True, None],
             "heatsink_temp_a":     [1, True, None],
             "heatsink_temp_b":     [1, True, None],
             "heatsink_temp_c":     [1, True, None],
             "heatsink_temp_d":     [1, True, None],     # invalid
-            "PV_charge_current":   [1, True, None]
-                     }
+            "PV_charge_current":   [1, False, None]}
         self.P02b_length = sum([v[0] for v in self.P02b.values()])
 
         self.P08a_addr = 0xF000
-        #               {"name": [length, db_write, value]
-        self.P08a = {
+        self.P08a = {    # {"name": [length, db_write, value]
              "power_gen_yesterday":  [1, False, None],
              "power_gen_2_day_bef":  [1, False, None],
              "power_gen_3_day_bef":  [1, False, None],
@@ -92,13 +202,11 @@ class EAsun:
              "dischg_lvl_4_day_bef": [1, False, None],
              "dischg_lvl_5_day_bef": [1, False, None],
              "dischg_lvl_6_day_bef": [1, False, None],
-             "dischg_lvl_7_day_bef": [1, False, None],
-                     }
+             "dischg_lvl_7_day_bef": [1, False, None]}
         self.P08a_length = sum([v[0] for v in self.P08a.values()])
 
         self.P08b_addr = 0xF015
-        #               {"name": [length, db_write, value]
-        self.P08b = {
+        self.P08b = {    # {"name": [length, db_write, value]
              "m_chg_lvl_yesterday":  [1, False, None],
              "m_chg_lvl_2_day_bef":  [1, False, None],
              "m_chg_lvl_3_day_bef":  [1, False, None],
@@ -120,13 +228,11 @@ class EAsun:
              "pwr_from_m_5_day_bef": [1, False, None],
              "pwr_from_m_6_day_bef": [1, False, None],
              "pwr_from_m_7_day_bef": [1, False, None],
-             "reserved_1":           [3, False, None],
-                     }
+             "reserved_1":           [3, False, None]}
         self.P08b_length = sum([v[0] for v in self.P08b.values()])
 
         self.P08c_addr = 0xF02D
-        #               {"name": [length, db_write, value]
-        self.P08c = {
+        self.P08c = {  # {"name": [length, db_write, value]
             "battery_charge_today": [1, False, None],
             "battery_dischg_today": [1, False, None],
             "pv_generated_today":   [1, False, None],
@@ -147,8 +253,7 @@ class EAsun:
             "mains_chg_lvl_total":  [2, False, None],
             "m_pwr_consm_total":    [2, False, None],
             "work_hours_inverter":  [1, False, None],
-            "work_hours_bypass":    [1, False, None],
-                     }
+            "work_hours_bypass":    [1, False, None]}
         self.P08c_length = sum([v[0] for v in self.P08c.values()])
 
         self.for_write = {}
@@ -288,27 +393,3 @@ class EAsun:
             df.to_csv(filename, header=True, index=False, sep=";")
         else:
             df.to_csv(filename, mode='a', header=False, index=False, sep=";")
-
-
-easun = EAsun()
-easun.on_off(True)
-# easun.save_mode(True)
-
-
-exit()
-e = 0
-while True:
-    try:
-        if easun.read_data():
-            print(easun)
-            easun.to_csv()
-        else:
-            e += 1
-            print("chyba č.:", e)
-        sleep(0.5)
-        print("chyb celkem:", e)
-        print("/"*20)
-    except KeyboardInterrupt:
-        break
-# easun.read_data()
-# easun.on_off()
