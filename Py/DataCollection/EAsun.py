@@ -164,24 +164,27 @@ class EAsun:
                               handshaking='N',
                               parity='N',
                               strict=False)
-        result_P01 = client.read_holding_registers(
-            address=self.P01_addr, count=self.P01_length, unit=1)
-        sleep(0.5)
-        result_P02a = client.read_holding_registers(
-            address=self.P02a_addr, count=self.P02a_length, unit=1)
-        sleep(0.5)
-        result_P02b = client.read_holding_registers(
-            address=self.P02b_addr, count=self.P02b_length, unit=1)
+        try:
+            result_P01 = client.read_holding_registers(
+                address=self.P01_addr, count=self.P01_length, unit=1)
+            sleep(0.5)
+            result_P02a = client.read_holding_registers(
+                address=self.P02a_addr, count=self.P02a_length, unit=1)
+            sleep(0.5)
+            result_P02b = client.read_holding_registers(
+                address=self.P02b_addr, count=self.P02b_length, unit=1)
 
-        sleep(0.5)
-        result_P08a = client.read_holding_registers(
-            address=self.P08a_addr, count=self.P08a_length, unit=1)
-        sleep(0.5)
-        result_P08b = client.read_holding_registers(
-            address=self.P08b_addr, count=self.P08b_length, unit=1)
-        sleep(0.5)
-        result_P08c = client.read_holding_registers(
-            address=self.P08c_addr, count=self.P08c_length, unit=1)
+            sleep(0.5)
+            result_P08a = client.read_holding_registers(
+                address=self.P08a_addr, count=self.P08a_length, unit=1)
+            sleep(0.5)
+            result_P08b = client.read_holding_registers(
+                address=self.P08b_addr, count=self.P08b_length, unit=1)
+            sleep(0.5)
+            result_P08c = client.read_holding_registers(
+                address=self.P08c_addr, count=self.P08c_length, unit=1)
+        except TimeoutError:
+            return False
 
         try:
             for reg, par in zip(result_P01.registers, self.P01):
@@ -204,7 +207,7 @@ class EAsun:
         finally:
             client.close()
 
-    def on_off(self):
+    def on_off(self, flag):
         client = ModbusClient(method='rtu',
                               # port="/dev/ttyUSB1",
                               port="COM1",
@@ -215,7 +218,21 @@ class EAsun:
                               handshaking='N',
                               parity='N',
                               strict=False)
-        client.write_register(0xDF00, 1)
+        client.write_register(0xDF00, int(flag))
+        client.close()
+
+    def save_mode(self, enable):
+        client = ModbusClient(method='rtu',
+                              # port="/dev/ttyUSB1",
+                              port="COM1",
+                              baudrate=9600,
+                              timeout=5,
+                              stopbits=1,
+                              bytesize=8,
+                              handshaking='N',
+                              parity='N',
+                              strict=False)
+        client.write_register(0xE20C, int(enable))
         client.close()
 
     def write2db(self):
@@ -274,6 +291,11 @@ class EAsun:
 
 
 easun = EAsun()
+easun.on_off(True)
+# easun.save_mode(True)
+
+
+exit()
 e = 0
 while True:
     try:
