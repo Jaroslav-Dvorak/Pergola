@@ -126,7 +126,7 @@ class EAsun:
         msg = json.dumps(msg)
 
         try:
-            publish.single("Juntek", msg, hostname="localhost")
+            publish.single("EAsun", msg, hostname="localhost")
         except Exception as e:
             self.errors.append(e)
             return False
