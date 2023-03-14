@@ -30,9 +30,11 @@ if __name__ == '__main__':
         if EAsunData:
             if easun.write2db(conn_obj=conn, data=EAsunData):
                 ok = True
-
+            easun.mqtt_publish(ok=ok, data=EAsunData)
             for par, val in EAsunData.items():
                 print(f"{par+':':<21} {str(val)}")
+
+
 
         try:
             sleep(1)
