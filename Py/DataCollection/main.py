@@ -28,11 +28,11 @@ if __name__ == '__main__':
         ok = False
         EAsunData = easun.read_actual_data()
         if EAsunData:
-            if juntek.write2db(conn_obj=conn):
+            if easun.write2db(conn_obj=conn, data=EAsunData):
                 ok = True
 
-        for par, val in EAsunData.items():
-            print(f"{par+':':<21} {str(val)}")
+            for par, val in EAsunData.items():
+                print(f"{par+':':<21} {str(val)}")
 
         try:
             sleep(1)

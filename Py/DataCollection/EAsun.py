@@ -1,8 +1,10 @@
-import os
 from time import sleep
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
-import pandas as pd
 from datetime import datetime
+import os
+import json
+import pandas as pd
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+import paho.mqtt.publish as publish
 
 
 class EAsun:
@@ -112,13 +114,23 @@ class EAsun:
             with conn_obj.cursor() as cursor:
                 cursor.execute(sqlstr)
         except Exception as e:
+            print(e)
             self.errors.append(e)
             return
         else:
             return True
 
-    def mqtt_publish(self, ok):
-        pass
+    def mqtt_publish(self, ok, data):
+
+        msg = data.update({"ok": ok})
+        msg = json.dumps(msg)
+
+        try:
+            publish.single("Juntek", msg, hostname="localhost")
+        except Exception as e:
+            self.errors.append(e)
+            return False
+        return True
 
 
 class OldClassEAsun:
