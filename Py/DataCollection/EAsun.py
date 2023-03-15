@@ -121,13 +121,14 @@ class EAsun:
             return True
 
     def mqtt_publish(self, ok, data):
-
-        msg = data.update({"ok": ok})
+        msg = data
+        msg["ok"] = int(ok)
         msg = json.dumps(msg)
 
         try:
             publish.single("EAsun", msg, hostname="localhost")
         except Exception as e:
+            print(e)
             self.errors.append(e)
             return False
         return True
