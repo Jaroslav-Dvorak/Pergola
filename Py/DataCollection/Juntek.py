@@ -28,7 +28,7 @@ class Juntek:
         self.read_data_error = 0
         self.errors = []
 
-    def read_data(self):
+    def read_actual_data(self):
         try:
             with serial.Serial(self.serial_port, 115200, timeout=1, write_timeout=1) as ser:
                 ser.write(b':R50=1,2,1,\r\n')
