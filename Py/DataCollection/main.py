@@ -19,11 +19,12 @@ if __name__ == '__main__':
     while True:
 
         ok = False
-        if juntek.read_data():
-            if juntek.write2db(conn_obj=conn):
+        juntek_data = juntek.read_data()
+        if juntek_data:
+            if juntek.write2db(conn_obj=conn, data=juntek_data):
                 ok = True
-        juntek.mqtt_publish(ok=ok)
-        print(juntek)
+            juntek.mqtt_publish(ok=ok, data=juntek_data)
+            print(juntek.format_report(juntek_data))
 
         ok = False
         EAsunData = easun.read_actual_data()
@@ -33,8 +34,6 @@ if __name__ == '__main__':
             easun.mqtt_publish(ok=ok, data=EAsunData)
             for par, val in EAsunData.items():
                 print(f"{par+':':<21} {str(val)}")
-
-
 
         try:
             sleep(1)

@@ -46,21 +46,33 @@ class EAsun:
 
         # self.actual_data_values = {}
         self.errors = []
+        self.read_data_error = 0
 
     def connect(self):
-        client = ModbusClient(method='rtu',
-                              port=self.serial_port,
-                              baudrate=9600,
-                              timeout=1,
-                              stopbits=1,
-                              bytesize=8,
-                              handshaking='N',
-                              parity='N',
-                              strict=False)
-        return client
+        try:
+            client = ModbusClient(method='rtu',
+                                  port=self.serial_port,
+                                  baudrate=9600,
+                                  timeout=1,
+                                  stopbits=1,
+                                  bytesize=8,
+                                  handshaking='N',
+                                  parity='N',
+                                  strict=False)
+        except KeyboardInterrupt:
+            exit()
+        except Exception as e:
+            self.errors.append(e)
+            self.read_data_error += 1
+            return False
+        else:
+            return client
 
     def read_actual_data(self):
         client = self.connect()
+        if not client:
+            return False
+
         data = {}
         results = []
         try:
