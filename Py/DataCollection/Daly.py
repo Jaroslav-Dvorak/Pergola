@@ -24,8 +24,11 @@ class Daly:
         if not response_data:
             return False
         cell_voltages = self._split_frames(response_data=response_data, structure=">b 3h x")
-        for cell_num in range(1, self.cells_num+1):
-            cell_voltages[f"cell_{cell_num}"] = cell_voltages.pop(cell_num)
+        if cell_voltages:
+            for cell_num in range(1, self.cells_num+1):
+                cell_voltages[f"cell_{cell_num}"] = cell_voltages.pop(cell_num)
+        else:
+            return False
 
         cell_voltages_list = list(cell_voltages.values())
         min_voltage = min(cell_voltages_list)
