@@ -4,9 +4,8 @@ import paho.mqtt.publish as publish
 
 
 class Juntek:
-    def __init__(self, db_table, serial_port):
+    def __init__(self, serial_port):
 
-        self.db_table = db_table
         self.serial_port = serial_port
 
         self.data_idx_names = [
@@ -71,21 +70,6 @@ class Juntek:
         else:
             self.read_data_error += 1
             self.errors.append("No data")
-
-    def write2db(self, conn_obj, data):
-        cols = list(data.keys())
-        cols = ",".join(cols)
-        vals = list(data.values())
-        vals = [str(val) for val in vals]
-        vals = ",".join(vals)
-        try:
-            with conn_obj.cursor() as cursor:
-                cursor.execute(f'INSERT into public."{self.db_table}" ({cols}) VALUES ({vals})')
-        except Exception as e:
-            self.errors.append(e)
-            return False
-        else:
-            return True
 
     def mqtt_publish(self, ok, data):
         voltage = data["voltage"] / 100

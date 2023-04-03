@@ -8,9 +8,8 @@ import paho.mqtt.publish as publish
 
 
 class EAsun:
-    def __init__(self, db_table, serial_port):
+    def __init__(self, serial_port):
         self.serial_port = serial_port
-        self.db_table = db_table
         self.actual_data_parameters = {
             0x100: {
                 "battery_level":        True,
@@ -80,7 +79,6 @@ class EAsun:
                 length = len(item)
                 result = client.read_holding_registers(address=addr, count=length, unit=1)
                 results.append(result)
-                sleep(0.5)
         except TimeoutError:
             return False
 
@@ -115,22 +113,6 @@ class EAsun:
         client = self.connect()
         client.write_register(0xE20C, int(enable))
         client.close()
-
-    def write2db(self, conn_obj, data):
-        keys = ", ".join(data.keys())
-        values = [str(val) for val in data.values()]
-        values = ", ".join(values)
-        sqlstr = f'INSERT into public."{self.db_table}" ({keys}) VALUES ({values})'
-
-        try:
-            with conn_obj.cursor() as cursor:
-                cursor.execute(sqlstr)
-        except Exception as e:
-            print(e)
-            self.errors.append(e)
-            return
-        else:
-            return True
 
     def mqtt_publish(self, ok, data):
         msg = data

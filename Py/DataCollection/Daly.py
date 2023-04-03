@@ -5,13 +5,12 @@ import paho.mqtt.publish as publish
 
 
 class Daly:
-    def __init__(self, db_table, serial_port):
+    def __init__(self, serial_port):
         """code taken from https://github.com/dreadnought/python-daly-bms"""
 
         self.address = 4
         self.cells_num = 8
         self.serial_port = serial_port
-        self.db_table = db_table
 
         self.errors = []
 
@@ -36,22 +35,6 @@ class Daly:
         difference = max_voltage - min_voltage
         cell_voltages["diff"] = difference
         return cell_voltages
-
-    def write2db(self, conn_obj, data):
-        cols = list(data.keys())
-        cols = [str(col) for col in cols]
-        cols = ",".join(cols)
-        vals = list(data.values())
-        vals = [str(val) for val in vals]
-        vals = ",".join(vals)
-        try:
-            with conn_obj.cursor() as cursor:
-                cursor.execute(f'INSERT into public."{self.db_table}" ({cols}) VALUES ({vals})')
-        except Exception as e:
-            self.errors.append(e)
-            return False
-        else:
-            return True
 
     def mqtt_publish(self, ok, data):
         msg = data
@@ -151,7 +134,10 @@ class Daly:
         values = {}
         x = 1
         for response_bytes in response_data:
-            parts = struct.unpack(structure, response_bytes)
+            try:
+                parts = struct.unpack(structure, response_bytes)
+            except struct.error:
+                return False
             if parts[0] != x:
                 continue
             for value in parts[1:]:
