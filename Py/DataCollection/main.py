@@ -48,17 +48,6 @@ if __name__ == '__main__':
             break
 
         ok = False
-        daly_data = daly.read_actual_data()
-        if daly_data:
-            if write2db(data=daly_data, db_table="Daly"):
-                ok = True
-            daly.mqtt_publish(ok=ok, data=daly_data)
-            print(daly.format_report(daly_data))
-
-        if not wait():
-            break
-
-        ok = False
         epever_data = epever.read_actual_data()
         if epever_data:
             if write2db(data=epever_data, db_table="EPever"):
@@ -67,6 +56,17 @@ if __name__ == '__main__':
             # print(epever.format_report(daly_data))
             for k, v in epever_data.items():
                 print(k, v)
+
+        if not wait():
+            break
+
+        ok = False
+        daly_data = daly.read_actual_data()
+        if daly_data:
+            if write2db(data=daly_data, db_table="Daly"):
+                ok = True
+            daly.mqtt_publish(ok=ok, data=daly_data)
+            print(daly.format_report(daly_data))
 
         if not wait():
             break
