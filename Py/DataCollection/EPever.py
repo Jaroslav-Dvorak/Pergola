@@ -1,5 +1,7 @@
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from datetime import datetime
+import json
+from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+import paho.mqtt.publish as publish
 
 
 class EPever:
@@ -124,3 +126,16 @@ class EPever:
     def merge_8bit_to_16bit(low, high):
         res = (high << 8) | low
         return res
+
+    def mqtt_publish(self, ok, data):
+        msg = data
+        msg["ok"] = int(ok)
+        msg = json.dumps(msg)
+
+        try:
+            publish.single("EPever", msg, hostname="localhost")
+        except Exception as e:
+            print(e)
+            self.errors.append(e)
+            return False
+        return True
