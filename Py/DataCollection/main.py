@@ -43,15 +43,17 @@ if __name__ == '__main__':
             daly.mqtt_publish(ok=ok, data=daly_data)
             print(daly.format_report(daly_data))
 
+        sleep(0.5)
+
         ok = False
         epever_data = epever.read_actual_data()
         if epever_data:
-            if write2db(data=epever_data, db_table="epever"):
+            if write2db(data=epever_data, db_table="EPever"):
                 ok = True
         # epever.mqtt_publish(ok=ok, data=epever)
         # print(epever.format_report(daly_data))
-        for k, v in epever_data.items():
-            print(k, v)
+            for k, v in epever_data.items():
+                print(k, v)
 
         try:
             sleep(0.5)
