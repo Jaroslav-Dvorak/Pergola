@@ -63,7 +63,7 @@ if __name__ == '__main__':
         if epever_data:
             if write2db(data=epever_data, db_table="EPever"):
                 ok = True
-            epever.mqtt_publish(ok=ok, data=epever)
+            epever.mqtt_publish(ok=ok, data=epever_data)
             # print(epever.format_report(daly_data))
             for k, v in epever_data.items():
                 print(k, v)
