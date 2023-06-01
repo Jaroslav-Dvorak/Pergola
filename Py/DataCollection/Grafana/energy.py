@@ -1,0 +1,8 @@
+
+
+
+
+
+
+class Energy:
+    pass

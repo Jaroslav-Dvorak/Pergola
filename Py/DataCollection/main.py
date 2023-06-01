@@ -1,9 +1,12 @@
+import subprocess
 from time import sleep
 from data_interface import write2db, conn
 from Juntek import Juntek
 from EAsun import EAsun
 from Daly import Daly
 from EPever import EPever
+
+subprocess.run(["lxterminal", "-e", "python3 D69.py"])
 
 
 juntek = Juntek(serial_port='/dev/ttyUSB0')
