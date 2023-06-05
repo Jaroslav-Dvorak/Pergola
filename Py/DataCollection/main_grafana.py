@@ -27,7 +27,7 @@ def on_message(_client, userdata, msg):
         msg = json.loads(msg)
         if topic == "pico_w/test":
             power.string_1 = float(msg["power"])
-            bojler.string_power = float(msg["power"])
+            bojler.string_power = power.string_1
         elif topic == "EPever":
             power.string_2 = int(msg["pv_power"])/100
         elif topic == "EAsun":

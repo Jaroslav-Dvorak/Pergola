@@ -4,10 +4,14 @@ import json
 
 
 def on_message(client, userdata, message):
-    msg = message.payload.decode("utf-8")
-    msg = json.loads(msg)
-    write2db(msg, "D69")
-    print(msg)
+    try:
+        msg = message.payload.decode("utf-8")
+        msg = json.loads(msg)
+        write2db(msg, "D69")
+    except Exception as e:
+        print(e)
+    else:
+        print(msg)
 
 
 subscribe.callback(on_message, "pico_w/test", hostname="127.0.0.1")
