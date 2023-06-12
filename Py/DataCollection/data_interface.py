@@ -1,4 +1,5 @@
 import json
+from datetime import timezone
 import psycopg2
 
 with open("../db_conf.json", "r") as f:
@@ -23,3 +24,21 @@ def write2db(data, db_table):
         return
     else:
         return True
+
+
+def read_energy(time_from, time_to):
+    time_from = time_from.astimezone(timezone.utc).isoformat()
+    time_to = time_to.astimezone(timezone.utc).isoformat()
+    print(time_from)
+    print(time_to)
+    sqlstr = f"SELECT MAX(energy)-MIN(energy) AS energy FROM \"D69\" " \
+             f"WHERE time BETWEEN '{time_from}' AND '{time_to}'"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sqlstr)
+            result = cursor.fetchone()
+    except Exception as e:
+        print(e)
+        return
+    else:
+        return result[0]
