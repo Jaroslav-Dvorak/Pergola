@@ -54,6 +54,7 @@ def pub_often():
 def pub_5min():
     mqtt_client.publish("grafana/energy", json.dumps(energy.get_hours()))
     sleep(0.1)
+    mqtt_client.publish("grafana/text", json.dumps({"DNES VYROBENO": energy.get_day_kwh()}))
 
 
 mqtt_client.loop_start()
