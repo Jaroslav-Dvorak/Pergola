@@ -1,22 +1,13 @@
-from time import sleep
-import json
-from random import randint
 import paho.mqtt.publish as publish
+import json
+# publish.single("Juntek", 10, hostname="192.168.167.94")
 
+msg = '{"voltage": 20.45, "current": 1546}'
+msg = {"voltage": 20.45, "current": 1546}
+msg = json.dumps(msg)
 
-def pub(topic):
-    voltage = randint(0, 40000)/100
-    current = randint(0, 200)/10
-    power = round(voltage * current, 2)
-    msg = {"voltage": 0.0, "current": 0.0, "power": 0.0, "energy": 224.489}
-    msg = json.dumps(msg)
+publish.single("Juntek", msg, hostname="192.168.167.94")
 
-    publish.single(topic, msg, hostname="127.0.0.1")
-
-
-while True:
-    try:
-        pub("D69")
-        sleep(2)
-    except KeyboardInterrupt:
-        break
+# simple(topics, qos=0, msg_count=1, retained=False, hostname="localhost",
+#        port=1883, client_id="", keepalive=60, will=None, auth=None, tls=None,
+#        protocol=mqtt.MQTTv311)

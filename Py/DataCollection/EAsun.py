@@ -47,6 +47,9 @@ class EAsun:
         self.errors = []
         self.read_data_error = 0
 
+        self.sun_avaible = False
+        self.inverter_run = None
+
     def connect(self):
         try:
             client = ModbusClient(method='rtu',
@@ -108,6 +111,7 @@ class EAsun:
         client = self.connect()
         client.write_register(0xDF00, int(flag))
         client.close()
+        self.inverter_run = bool(flag)
 
     def save_mode(self, enable):
         client = self.connect()

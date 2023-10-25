@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import datetime, date
 import locale
 import platform
 from dash import Dash, html, dcc
@@ -59,4 +59,4 @@ def render_graph(ok_buton, start_date, end_date):
 
 
 if __name__ == '__main__':
-    app.run_server("0.0.0.0", debug=True, )
+    app.run_server("0.0.0.0", debug=False, )

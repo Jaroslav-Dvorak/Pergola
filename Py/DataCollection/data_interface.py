@@ -12,7 +12,7 @@ conn.set_session(autocommit=True)
 
 def write2db(data, db_table):
     keys = ", ".join(data.keys())
-    values = [str(val) for val in data.values()]
+    values = [str(val) if val is not None else "null" for val in data.values()]
     values = ", ".join(values)
     sqlstr = f'INSERT into public."{db_table}" ({keys}) VALUES ({values})'
 

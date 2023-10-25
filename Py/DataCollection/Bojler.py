@@ -7,7 +7,7 @@ def on_message(client, userdata, message):
     try:
         msg = message.payload.decode("utf-8")
         msg = json.loads(msg)
-        msg = {k: int(v*10) for k, v in msg.items()}
+        # ~ msg = {k: int(v*10) for k, v in msg.items()}
         write2db(msg, "Bojler")
     except Exception as e:
         print(e)
@@ -15,4 +15,4 @@ def on_message(client, userdata, message):
         print(msg)
 
 
-subscribe.callback(on_message, "Bojler", hostname="127.0.0.1")
+subscribe.callback(on_message, "Bojler", hostname="127.0.0.1", qos=1)

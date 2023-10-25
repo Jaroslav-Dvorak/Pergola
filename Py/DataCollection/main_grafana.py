@@ -53,9 +53,9 @@ def pub_often():
 
 def pub_5min():
     mqtt_client.publish("grafana/energy", json.dumps(energy.get_hours()))
-    sleep(0.1)
+    sleep(0.1)    
     mqtt_client.publish("grafana/text", json.dumps({"DNES VYROBENO": energy.get_day_kwh()}))
-
+    sleep(0.1) 
 
 mqtt_client.loop_start()
 # schedule.every(1).second.do(job)
@@ -68,10 +68,11 @@ while True:
         try:
             pub_often()
         except Exception as e:
-            mqtt_client.reconnect()
+            mqtt_client = mqtt.Client()
+            mqtt_client.connect("127.0.0.1", 1883, 60)
             print(e)
 
-    if (time() - t2) > 300:
+    if (time() - t2) > 15:
         t2 = time()
         try:
             pub_5min()

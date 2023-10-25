@@ -38,8 +38,8 @@ def juntek_graph(df):
     fig.update_layout(template="plotly_dark")
     fig.update_layout(title_text="", height=900)
     return fig
-
-
+    
+    
 with open("../db_conf.json", "r") as f:
     raw = f.read()
 conn_params = json.loads(raw)

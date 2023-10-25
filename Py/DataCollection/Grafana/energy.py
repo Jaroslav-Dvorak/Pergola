@@ -23,9 +23,9 @@ class Energy:
     def populate_hours(self):
         bar_production = {}
         for index, dayhour in enumerate(self.dayhours):
-            # if dayhour > datetime.now().hour:
-            #     bar_production[f"{index}"] = 0
-            #     continue
+            # ~ if dayhour > datetime.now().hour:
+                # ~ bar_production[f"{index}"] = 0
+                # ~ continue
             date_from, date_to = self.get_hours_date(dayhour)
             produced = self.read_energy(date_from, date_to)
             if not produced:

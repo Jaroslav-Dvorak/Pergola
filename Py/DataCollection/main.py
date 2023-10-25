@@ -74,4 +74,20 @@ if __name__ == '__main__':
         if not wait():
             break
 
+        if juntek_data and EAsun_data:
+            try:
+                if EAsun_data["PV_voltage"] > 3000:
+                    easun.sun_avaible = True
+                elif EAsun_data["PV_voltage"] < 1200:
+                    easun.sun_avaible = False
+
+                if juntek_data["charged"] < 2000 and not easun.sun_avaible:
+                    if easun.inverter_run is None or easun.inverter_run is True:
+                        easun.on_off(False)
+                else:
+                    if easun.inverter_run is None or easun.inverter_run is False:
+                        easun.on_off(True)
+            except Exception as e:
+                print(e)
+
 conn.close()

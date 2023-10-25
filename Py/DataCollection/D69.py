@@ -3,7 +3,7 @@ from data_interface import write2db
 import json
 
 Last_energy = None
-zeroing = 516.382 #1.7.2023
+zeroing = 516.382   # 1.7.2023
 
 def to_db(msg):
     global Last_energy
