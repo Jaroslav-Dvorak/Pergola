@@ -49,6 +49,7 @@ class EAsun:
 
         self.sun_avaible = False
         self.inverter_run = None
+        self.last_start = 0
 
     def connect(self):
         try:
@@ -116,6 +117,17 @@ class EAsun:
     def save_mode(self, enable):
         client = self.connect()
         client.write_register(0xE20C, int(enable))
+        client.close()
+
+    def read_register(self, addr):
+        client = self.connect()
+        result = client.read_holding_registers(addr, unit=1)
+        client.close()
+        return result.registers
+
+    def write_register(self, addr, value):
+        client = self.connect()
+        client.write_register(addr, int(value))
         client.close()
 
     def mqtt_publish(self, ok, data):
