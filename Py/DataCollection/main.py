@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 elif EAsun_data["PV_voltage"] < 1200:
                     easun.sun_avaible = False
 
-                if juntek_data["charged"] < 2000 and not easun.sun_avaible and easun.last_start < time()-7200:
+                if juntek_data["charged"] < 1000 and not easun.sun_avaible and easun.last_start < time()-7200:
                     if easun.inverter_run is None or easun.inverter_run is True:
                         easun.on_off(False)
                         easun.inverter_run = False

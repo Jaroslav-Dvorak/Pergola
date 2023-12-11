@@ -104,6 +104,10 @@ class EPever:
         with self.connect() as client:
             client.write_registers(address=0x9013, values=registers, unit=unit)
 
+    def charging_on_off(self, value):
+        with self.connect() as client:
+            client.write_coil(address=0, value=int(value), unit=0)
+
     @staticmethod
     def uint2int(uint):
         if uint > 2147483647:
