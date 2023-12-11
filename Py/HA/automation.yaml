@@ -1,0 +1,13 @@
+- id: spustit_službu_po_startu
+  alias: Spustit službu po startu
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    repeat:
+      while:
+        - condition: template
+          value_template: "{{ true }}"
+      sequence:
+        - service: pyscript.hello_world
+        - delay: "00:00:01"
