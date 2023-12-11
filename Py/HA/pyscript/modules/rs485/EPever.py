@@ -1,12 +1,19 @@
+from time import sleep
+import json
 import paho.mqtt.publish as publish
 import pymodbus
-from time import sleep
+from . import entity
+from random import randint
+
+IDENTIFIER = "f5ae5fsa8"
+DEVICE_NAME = "EPever-XTRA3210N"
+
+Entity = entity.Entity
+Entities = (Entity("PV_voltage", "V", "voltage"),
+            Entity("PV_current", "A", "current"))
 
 
 @pyscript_compile
-def publ(arg):
-    publish.single("zdtestjakpes/konokun", payload="{'čuně': 555}", qos=0, retain=False, hostname="core-mosquitto",
-        port=1883, client_id="", keepalive=60, will=None,
-        auth={"username":"Jarda", "password":"admin"}, tls=None, transport="tcp")
-    sleep(2)
-
+def pull_values(interface):
+    for entity in Entities:
+        entity.value = randint(0, 100)

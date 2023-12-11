@@ -9,5 +9,5 @@
         - condition: template
           value_template: "{{ true }}"
       sequence:
-        - service: pyscript.hello_world
+        - service: pyscript.loop_over_devices
         - delay: "00:00:01"
