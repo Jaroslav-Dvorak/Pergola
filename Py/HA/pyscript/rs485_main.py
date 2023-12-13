@@ -1,6 +1,7 @@
 import json
 import paho.mqtt.publish as publish
 from rs485 import EPever
+from rs485 import EAsun
 
 @pyscript_compile
 def _publish(topic, msg, retain):
@@ -48,10 +49,11 @@ def send_discovery():
 @service
 def loop_over_devices(action=None, id=None):
     task.unique("pull", kill_me=True)
-    task.executor(EPever.pull_values, "/dev/ttyUSB0")
+    res = task.executor(EAsun.pull_values, "/dev/ttyUSB0", 1)
+    log.warning(str(res))
     topic = f"{EPever.DEVICE_NAME}/sensor" #.encode("utf-8")
     msg = {}
-    for entity in EPever.Entities:
+    for entity in EAsun.Entities:
         msg[entity.name] = entity.value
     msg = json.dumps(msg)
     task.unique("publ")
