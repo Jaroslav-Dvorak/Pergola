@@ -1,7 +1,6 @@
 import json
 import paho.mqtt.publish as publish
 from rs485 import EPever
-from rs485 import EAsun
 
 @pyscript_compile
 def _publish(topic, msg, retain):
@@ -9,10 +8,9 @@ def _publish(topic, msg, retain):
                 port=1883, client_id="", keepalive=60, will=None,
                 auth={"username": "Jarda", "password": "admin"}, tls=None, transport="tcp")
 
-
 def make_discovery(device_name, identifier, name, unit, device_class=None):
     discovery_prefix = "homeassistant"
-    topic = f"{discovery_prefix}/sensor/{device_name}/{name}/config" #.encode("utf-8")
+    topic = f"{discovery_prefix}/sensor/{device_name}/{name}/config"
     config = {
             "name": name,
             "state_topic": f"{device_name}/sensor",
@@ -30,13 +28,13 @@ def make_discovery(device_name, identifier, name, unit, device_class=None):
             }
     if device_class:
         config["device_class"] = device_class
-    msg = str(json.dumps(config)) #.encode("utf-8")
+    msg = str(json.dumps(config))
     return topic, msg
 
 
 @service
 def send_discovery():
-    for entity in EPever.Entities:
+    for entity in EPever.modbus_parser.registers.values():
         topic, msg = make_discovery(device_name=EPever.DEVICE_NAME,
                                     identifier=EPever.IDENTIFIER,
                                     name=entity.name,
@@ -46,15 +44,13 @@ def send_discovery():
         task.unique("discovery")
         task.executor(_publish, topic, msg, True)
 
+
 @service
 def loop_over_devices(action=None, id=None):
     task.unique("pull", kill_me=True)
-    res = task.executor(EAsun.pull_values, "/dev/ttyUSB0", 1)
-    log.warning(str(res))
-    topic = f"{EPever.DEVICE_NAME}/sensor" #.encode("utf-8")
-    msg = {}
-    for entity in EAsun.Entities:
-        msg[entity.name] = entity.value
+    msg = task.executor(EPever.pull_values, "/dev/ttyUSB0", 1)
+    # log.warning(str(msg))
+    topic = f"{EPever.DEVICE_NAME}/sensor"
     msg = json.dumps(msg)
     task.unique("publ")
     task.executor(_publish, topic, msg, False)
