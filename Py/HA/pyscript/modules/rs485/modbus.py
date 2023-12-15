@@ -57,11 +57,13 @@ class Register:
 
     @pyscript_compile
     def decode(self, byteorder, wordorder):
+        register_values = self.register_values
+        self.register_values = []
         match self.datatype:
             case "uint16":
-                return decode_16bit_uint(self.register_values, byteorder) * self.gain
+                return decode_16bit_uint(register_values, byteorder) * self.gain
             case "uint32":
-                return decode_32bit_uint(self.register_values, byteorder, wordorder) * self.gain
+                return decode_32bit_uint(register_values, byteorder, wordorder) * self.gain
 
 
 class ModbusParser:
@@ -70,6 +72,7 @@ class ModbusParser:
         self.registers = {}
         self.byteorder = byteorder
         self.wordorder = wordorder
+        self.device_info = {"name": "required_name", "identifiers": "required_id"}
 
     def add_address_range(self, start, end, name=None):
         address_range = AddressRange(start, end, name)
@@ -82,6 +85,14 @@ class ModbusParser:
                 self.registers[addr] = register
         else:
             self.registers[address] = Register(name, unit, device_class, datatype, gain)
+
+    @pyscript_compile
+    def merge_data_into_registers(self, addr_obj, reg_data):
+        for addr, data in zip(addr_obj.range, reg_data):
+            try:
+                self.registers[addr].register_values.append(data)
+            except KeyError:
+                pass
 
     @pyscript_compile
     def get_all_values(self):
